@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Nexa Bank</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #f5f7fb;
+            color: #0d1b3d;
+        }
+
+        /* 🔵 Smaller Premium Navbar */
+        .navbar {
+            background: #062045;
+            padding: 10px 35px;   /* Reduced height */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffcc33;
+        }
+
+        .nav-links a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .logout-btn {
+            background: #ffcc33;
+            padding: 7px 20px;
+            border-radius: 6px;
+            color: black !important; /* 🔥 Black text */
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        /* 🔵 Premium Card Border */
+        .accent-card {
+            border-left: 8px solid #002b6b;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            transition: 0.25s;
+        }
+
+        .accent-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+        }
+
+        /* TOP SUMMARY BOX */
+        .top-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px auto;
+            width: 85%;
+        }
+
+        .top-inner {
+            flex: 1;
+        }
+
+        .welcome-text {
+            font-size: 26px;
+            font-weight: 700;
+        }
+/* SUMMARY SINGLE CARD WRAPPER */
+.summary-wrapper {
+    width: 85%;
+    margin: 25px auto;
+}
+
+.summary-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 35px 40px;
+}
+
+/* Left side */
+.summary-left {
+    flex: 1;
+}
+
+.small-label {
+    font-size: 16px;
+    color: #334b77;
+    margin-bottom: 8px;
+}
+
+.balance-amount {
+    font-size: 42px;
+    font-weight: 700;
+    margin-top: 5px;
+    color: #062045;
+}
+
+/* Right side */
+.summary-right {
+    text-align: right;
+    min-width: 260px;
+}
+
+.account-age-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #062045;
+}
+
+/* Mobile responsive */
+@media (max-width: 700px) {
+    .summary-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .summary-right {
+        text-align: center;
+        margin-top: 20px;
+    }
+}
+
+        .balance-amount {
+            font-size: 42px;
+            font-weight: 700;
+            margin-top: 10px;
+            color: #062045;
+        }
+
+        .account-age {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        /* ACTION CARDS (Grid) */
+        .cards-container {
+            width: 85%;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .card-icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            margin-top: 15px;
+            padding: 10px 18px;
+            background: #ffcc33;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+        }
+
+        .btn:hover {
+            background: #ffd95e;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background: #062045;
+            color: #bbb;
+        }
+
+        @media (max-width: 900px) {
+            .cards-container { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .cards-container { grid-template-columns: 1fr; }
+            .top-summary { flex-direction: column; text-align: center; }
+            .account-age { text-align: center; margin-top: 15px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h1>NEXA BANK</h1>
+
+    <div class="nav-links">
+        <a href="#" id="policies-link">NEXA Bank Policies</a>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+</div>
+
+<!-- TOP SUMMARY BOX -->
+<!-- 🔵 TOP SUMMARY — SINGLE PREMIUM CARD -->
+<div class="summary-wrapper">
+    <div class="accent-card summary-card">
+
+        <div class="summary-left">
+            <div class="welcome-text">
+                Welcome back, <span th:text="${holderName}">Customer</span> 👋
+            </div>
+
+            <p class="small-label">Current Balance</p>
+            <div class="balance-amount">
+                ₹<span th:text="${balance}">0.00</span>
+            </div>
+        </div>
+
+        <div class="summary-right">
+            <p style="font-size:14px; color:#324c7e;">
+                <strong>🕒Last Login:</strong>
+                <span th:text="${formattedLastLogin}"></span> <br>
+
+                <strong>📍From:</strong>
+                <span th:text="${formattedIp}"></span>
+            </p>
+
+            <p class="small-label">Account Age</p>
+            <div class="account-age-value" th:text="${accountAge}">
+                0 years 0 months 0 days
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ACTION CARDS -->
+<div class="cards-container">
+
+    <div class="accent-card">
+        <div class="card-icon">📘</div>
+        <h3>View Account Details</h3>
+        <p>Complete breakdown of your account.</p>
+        <a th:href="@{'/account-details'(accountNumber=${accNumber})}" class="btn">Open</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">📊</div>
+        <h3>Recent Balance History</h3>
+        <p>Track your last 10 days' activity.</p>
+        <a th:href="@{'/balance-history'(accountNumber=${accNumber})}" class="btn">View</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">💸</div>
+        <h3>Transfer Money</h3>
+        <p>Send money instantly using IMPS, NEFT, UPI.</p>
+        <a th:href="@{'/transfer'(accountNumber=${accNumber})}" class="btn">Transfer ₹</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">🏧</div>
+        <h3>Withdraw</h3>
+        <p>Withdraw funds securely anytime.</p>
+        <a th:href="@{'/withdraw'(accountNumber=${accNumber})}" class="btn">Withdraw ₹</a>
+    </div>
+
+    <!-- NEXT ROW -->
+
+    <div class="accent-card">
+        <div class="card-icon">💰</div>
+        <h3>Deposit</h3>
+        <p>Add money using UPI, NEFT, IMPS.</p>
+        <a th:href="@{'/deposit'(accountNumber=${accNumber})}" class="btn">Deposit ₹</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">📄</div>
+        <h3>Statements</h3>
+        <p>Download your monthly statements.</p>
+        <a th:href="@{'/statements'(accountNumber=${accNumber})}" class="btn">Open</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">🎯</div>
+        <h3>Daily Spending Limit</h3>
+        <p>Set maximum daily transaction limits.</p>
+        <a th:href="@{'/daily-limit'(accountNumber=${accNumber})}" class="btn">Manage</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">🔐</div>
+        <h3>Freeze / Unfreeze Card</h3>
+        <p>Instantly lock or unlock your card.</p>
+        <a th:href="@{'/card-security'(accountNumber=${accNumber})}" class="btn">Manage</a>
+    </div>
+
+    <!-- NEXT ROW -->
+
+    <div class="accent-card">
+        <div class="card-icon">💳</div>
+        <h3>Virtual Debit Card</h3>
+        <p>View your digital card securely.</p>
+        <a th:href="@{'/virtual-card'(accountNumber=${accNumber})}" class="btn">View</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">🏦</div>
+        <h3>Apply Loan</h3>
+        <p>Apply for personal, home, or education loans.</p>
+        <a th:href="@{'/loan/selection'(accountNumber=${accNumber})}" class="btn">Apply</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">📚</div>
+        <h3>Loan History</h3>
+        <p>View loan status and history.</p>
+        <a th:href="@{'/loan/history'(accountNumber=${accNumber})}" class="btn">View</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">📣</div>
+        <h3>Raise Complaint</h3>
+        <p>Submit issues or concerns.</p>
+        <a th:href="@{'/raise-complaint'(accountNumber=${accNumber})}" class="btn">Raise</a>
+    </div>
+
+    <!-- LAST ROW -->
+
+    <div class="accent-card">
+        <div class="card-icon">🗂️</div>
+        <h3>Complaint History</h3>
+        <p>View previous complaints and replies.</p>
+        <a th:href="@{'/complaint-history'(accountNumber=${accNumber})}" class="btn">History</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">⭐</div>
+        <h3>Credit Score</h3>
+        <p>Check your financial credit score.</p>
+        <a th:href="@{'/credit-score'(accountNumber=${accNumber})}" class="btn">View Score</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">📈</div>
+        <h3>Expense Analyzer</h3>
+        <p>Analyze monthly spending with charts.</p>
+        <a th:href="@{'/expense-analysis'(accountNumber=${accNumber})}" class="btn">Analyze</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">🔑</div>
+        <h3>Change PIN</h3>
+        <p>Change your ATM/transaction PIN securely.</p>
+        <a th:href="@{/change-pin(accountNumber=${accNumber})}" class="btn">Change</a>
+    </div>
+    <div class="accent-card">
+        <div class="card-icon">📱</div>
+        <h3>Mobile Recharge</h3>
+        <p>Recharge prepaid, postpaid, and DTH.</p>
+        <a th:href="@{'/recharge'(accountNumber=${accNumber})}" class="btn">Recharge</a>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">💡</div>
+        <h3>Pay Bills</h3>
+        <p>Electricity, Gas, Water, Broadband.</p>
+        <a th:href="@{'/bill-payment'(accountNumber=${accNumber})}" class="btn">Pay Bill</a>
+    </div>
+    <div class="accent-card">
+        <div class="card-icon">📝</div>
+        <h3>Give Feedback</h3>
+        <p>Help us improve Nexa Bank!</p>
+        <button class="btn" onclick="openFeedback()">Give Feedback</button>
+    </div>
+
+    <div class="accent-card">
+        <div class="card-icon">🗑️</div>
+        <h3>Delete Account</h3>
+        <p>Permanently close your account.</p>
+        <a th:href="@{'/delete-account-form'(accountNumber=${accNumber})}" class="btn">Delete</a>
+    </div>
+
+</div>
+
+<footer>
+    © 2025 Nexa Bank. All Rights Reserved.
+</footer>
+<!-- POLICIES MODAL -->
+<div id="policies-modal" class="modal" style="
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex; justify-content: center; align-items: center;
+    visibility: hidden; opacity: 0;
+    transition: 0.2s;">
+    <div class="modal-content" style="
+        width: 90%; max-width: 800px;
+        background: white; border-radius: 12px;
+        padding: 20px; box-shadow: 0 5px 25px rgba(0,0,0,0.25);
+        max-height: 85vh; overflow-y: auto;">
+
+        <h2 style="margin-top:0; color:#062045;">NEXA Bank Policies</h2>
+        <p style="color:#324c7e;">Important bank guidelines and policies</p>
+
+        <hr>
+
+        <h3>Account Usage Policy</h3>
+        <p>Customers must maintain minimum balances as applicable. Accounts should not be used for money laundering or suspicious activity.</p>
+
+        <h3>Data Privacy Policy</h3>
+        <p>Your data is safely encrypted. We protect customer information and never share it without consent.</p>
+
+        <div style="text-align:right; margin-top:20px;">
+            <button id="policies-close" class="btn">Close</button>
+        </div>
+    </div>
+</div>
+<script>
+    const modal = document.getElementById("policies-modal");
+    const openBtn = document.getElementById("policies-link");
+    const closeBtn = document.getElementById("policies-close");
+
+    // OPEN MODAL
+    openBtn.addEventListener("click", function(e){
+        e.preventDefault();
+        modal.style.visibility = "visible";
+        modal.style.opacity = "1";
+    });
+
+    // CLOSE MODAL
+    closeBtn.addEventListener("click", function(){
+        modal.style.opacity = "0";
+        modal.style.visibility = "hidden";
+    });
+
+    // CLOSE WHEN CLICK OUTSIDE
+    modal.addEventListener("click", function(e){
+        if(e.target === modal){
+            modal.style.opacity = "0";
+            modal.style.visibility = "hidden";
+        }
+    });
+</script>
+<!-- ======================================================
+     NEXA AI CHATBOT — VERSION 3.1 (BUG FIXED)
+     Paste this ABOVE </body>
+======================================================== -->
+
+<!-- Hidden account -->
+<input type="hidden" id="acc-number-for-chat" th:value="${accNumber}"/>
+
+<style>
+    /* Floating Chat Button */
+    #chatbot-btn {
+        position: fixed !important;
+        bottom: 25px !important;
+        right: 25px !important;
+        background: #ffcc33;
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 28px;
+        cursor: pointer;
+        z-index: 9999 !important;
+        box-shadow: 0px 5px 18px rgba(0,0,0,0.25);
+    }
+
+    #chatbot-window {
+        position: fixed !important;
+        bottom: 100px !important;
+        right: 25px !important;
+        width: 360px;
+        height: 480px;
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0px 8px 30px rgba(0,0,0,0.25);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 99999 !important;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .chat-chip {
+        background:#062045;
+        color:white;
+        padding:6px 12px;
+        border-radius:8px;
+        margin:5px;
+        cursor:pointer;
+        font-size:13px;
+        display:inline-block;
+    }
+    .chat-chip:hover {
+        background:#ffcc33;
+        color:#062045;
+        font-weight:700;
+    }
+</style>
+
+<!-- Chat Button -->
+<div id="chatbot-btn">🤖</div>
+
+<!-- Chat Window -->
+<div id="chatbot-window">
+    <div style="background:#062045; color:white; padding:14px; text-align:center; font-size:17px; font-weight:600;">
+        Nexa AI Assistant 💬
+    </div>
+
+    <div id="chat-area" style="flex:1; padding:12px; overflow-y:auto; background:#f5f7fb;"></div>
+
+    <div id="suggestedBtns"
+         style="padding:8px; text-align:center; background:white; display:none;"></div>
+
+    <div style="padding:10px; display:flex; gap:8px; background:white;">
+        <input id="chat-input" type="text"
+               placeholder="Ask me anything..."
+               style="flex:1; padding:10px; border:1px solid #d6dfe9; border-radius:8px;">
+        <button id="chat-send"
+                style="padding:10px 12px; background:#ffcc33; border:none; border-radius:8px; font-weight:700;">
+            Send
+        </button>
+    </div>
+</div>
+
+<script>
+    const btn = document.getElementById("chatbot-btn");
+    const win = document.getElementById("chatbot-window");
+    const chat = document.getElementById("chat-area");
+    const chatInput = document.getElementById("chat-input");
+    const chatSend = document.getElementById("chat-send");
+    const sugg = document.getElementById("suggestedBtns");
+    const accHidden = document.getElementById("acc-number-for-chat");
+
+    /* OPEN/CLOSE Chat */
+    btn.onclick = () => {
+        win.style.display = (win.style.display === "flex") ? "none" : "flex";
+
+        if (win.style.display === "flex") {
+            chatInput.focus();
+
+            if (!chat.dataset.loaded) {
+                chat.dataset.loaded = "true";
+                loadWelcome();
+            }
+        }
+    };
+
+    /* Load welcome only once */
+    function loadWelcome() {
+        fetch("/chatbot?message=__welcome__")
+            .then(r => r.text())
+            .then(reply => showBot(reply));
+    }
+
+    /* Add Message */
+    function addMessage(text, sender) {
+        const div = document.createElement("div");
+        div.style.margin = "8px 0";
+        div.style.display = "flex";
+        div.style.justifyContent = sender === "user" ? "flex-end" : "flex-start";
+
+        const bubble = document.createElement("div");
+        bubble.style.maxWidth = "80%";
+        bubble.style.padding = "8px 12px";
+        bubble.style.borderRadius = "12px";
+        bubble.style.background = sender === "user" ? "#ffcc33" : "#e5e8ef";
+        bubble.style.color = "#062045";
+
+        if (sender === "user") bubble.innerText = text;
+        else bubble.innerHTML = text;
+
+        div.appendChild(bubble);
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    /* Show Bot Reply + Chips */
+    function showBot(reply) {
+        addMessage(reply, "bot");
+
+        const chips = reply.match(/<button class='chat-chip'[^>]*>.*?<\/button>/g);
+        if (chips) {
+            sugg.innerHTML = chips.map(c =>
+                c.replace(
+                    "class='chat-chip'",
+                    "class='chat-chip' onclick=\"quickAsk(this.innerText)\""
+                )
+            ).join("");
+            sugg.style.display = "block";
+        } else {
+            sugg.style.display = "none";
+        }
+    }
+
+    /* Send to backend */
+    async function sendToBackend(text) {
+        const acc = accHidden ? accHidden.value : "";
+        const url = `/chatbot?message=${encodeURIComponent(text)}&accNumber=${encodeURIComponent(acc)}`;
+        const res = await fetch(url);
+        return await res.text();
+    }
+
+    /* Main Send Function */
+    async function handleSend() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        addMessage(text, "user");
+        chatInput.value = "";
+
+        let tmp = document.createElement("div");
+        tmp.innerHTML = "Typing...";
+        chat.appendChild(tmp);
+
+        const reply = await sendToBackend(text);
+
+        tmp.remove();
+        showBot(reply);
+    }
+
+    chatSend.onclick = handleSend;
+    chatInput.onkeydown = e => { if (e.key === "Enter") handleSend(); };
+
+    /* Quick Ask Buttons */
+    function quickAsk(text) {
+        chatInput.value = text;
+        handleSend();
+    }
+    function openFeedback() {
+    const modal = document.getElementById("feedback-modal");
+    modal.style.visibility = "visible";
+    modal.style.opacity = "1";
+}
+
+function closeFeedback() {
+    const modal = document.getElementById("feedback-modal");
+    modal.style.opacity = "0";
+    modal.style.visibility = "hidden";
+}
+
+async function submitFeedback() {
+    const text = document.getElementById("feedback-text").value.trim();
+    const acc = document.getElementById("acc-number-for-chat").value;
+    const successBox = document.getElementById("feedback-success");
+
+    if (!text) {
+        alert("Please enter feedback.");
+        return;
+    }
+
+    const res = await fetch("/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountNumber: acc, message: text })
+    });
+
+    if (res.ok) {
+        // SHOW SUCCESS IN PAGE ✔
+        successBox.style.display = "block";
+
+        // Clear textarea
+        document.getElementById("feedback-text").value = "";
+
+        // Auto hide after 3 secs
+        setTimeout(() => {
+            successBox.style.display = "none";
+        }, 3000);
+    } else {
+        alert("Something went wrong. Try again.");
+    }
+}
+
+</script>
+<!-- FEEDBACK MODAL -->
+<div id="feedback-modal" class="modal" style="
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex; justify-content: center; align-items: center;
+    visibility: hidden; opacity: 0; transition: 0.2s;">
+
+    <div style="
+        background:white; border-radius:12px;
+        padding:20px; width:90%; max-width:450px;">
+
+        <h2 style="margin-top:0;">Give Feedback 💬</h2>
+        <div id="feedback-success"
+             style="display:none;
+            background:#e7ffe7;
+            color:#0a7b0a;
+            padding:10px;
+            border-left:5px solid #0a7b0a;
+            border-radius:6px;
+            margin-bottom:10px;
+            font-weight:600;">
+            ✔ Feedback submitted successfully!
+        </div>
+
+        <textarea id="feedback-text"
+                  style="width:100%; height:120px;
+                  border:1px solid #ccc; border-radius:8px;
+                  padding:10px; font-size:15px;"
+                  placeholder="Write your feedback here..."></textarea>
+
+        <div style="margin-top:15px; text-align:right;">
+            <button class="btn" onclick="submitFeedback()">Submit</button>
+            <button class="btn" onclick="closeFeedback()">Close</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login - Nexa Bank</title>
+
+    <style>
+        body {
+            background: linear-gradient(to right, #0d1b3d, #1d3a73);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 900px;
+            height: 620px;
+            background: white;
+            border-radius: 25px;
+            display: flex;
+            box-shadow: 0 0 40px rgba(0,0,0,0.25);
+            overflow: hidden;
+        }
+
+        /* LEFT PANEL */
+        .left-panel {
+            width: 45%;
+            background: #102c57;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;  /* CENTER horizontally */
+            text-align: center; /* CENTER text */
+            padding: 40px;
+        }
+
+        /* MATCH YOUR CREATE ACCOUNT PAGE LOGO BOX */
+        .logo-box {
+            width: 180px;
+            height: 180px;
+            background: white;
+            border-radius: 25px;
+            border: 4px solid #f5c542;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 18px rgba(255, 215, 0, 0.55);
+            margin-bottom: 35px;
+        }
+
+        .logo-box img {
+            width: 70%;
+        }
+
+        .left-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .left-text {
+            font-size: 17px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* RIGHT PANEL */
+        .right-panel {
+            width: 55%;
+            padding: 50px 55px;
+            background: white;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0d1b3d;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 25px;
+        }
+
+        /* ERROR MESSAGE ON PAGE */
+        .error {
+            color: red;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-size: 14px;
+            color: #0d1b3d;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 14px;
+            border-radius: 10px;
+            border: 1px solid #bfbfbf;
+            font-size: 16px;
+        }
+
+        input:disabled {
+            background: #eee;
+        }
+
+        /* PERFECT CHECKBOX ALIGNMENT */
+        .show-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: -5px;
+            margin-bottom: 18px;
+        }
+
+        .show-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+        }
+
+        .show-row span {
+            font-size: 15px;
+            color: #0d1b3d;
+        }
+
+        /* CAPTCHA */
+        .captcha-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .captcha-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .captcha-box {
+            background: #0d1b3d;
+            color: white;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .reload {
+            font-size: 22px;
+            cursor: pointer;
+            color: #0d1b3d;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            background: #f5c542;
+            border: none;
+            color: #0d1b3d;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background: #e4b634;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LEFT SIDE -->
+    <div class="left-panel">
+        <div class="logo-box">
+            <img th:src="@{/bank.png}" alt="Bank Logo">
+        </div>
+
+        <div class="left-title">Nexa Bank</div>
+
+        <div class="left-text">
+            Secure • Smart • Modern Banking<br>
+            Access your dashboard safely.<br>
+            Authorized Admin Portal.
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right-panel">
+
+        <h2>Admin Login</h2>
+
+        <!-- BACKEND ERROR MESSAGE -->
+        <p class="error" th:if="${error}" th:text="${error}"></p>
+
+        <form id="adminForm" method="post" action="/admin/login">
+
+            <label>Admin ID</label>
+            <input type="text" id="adminId" name="adminId" placeholder="Enter Admin ID" required>
+
+            <label>Password</label>
+            <input type="password" id="password" name="password"
+                   placeholder="Enter Password" disabled required>
+
+            <!-- SHOW PASSWORD FIX -->
+            <div class="show-row">
+                <input type="checkbox" id="showPass" onclick="togglePassword()">
+                <span>Show Password</span>
+            </div>
+            <!-- Forgot Password -->
+            <div style="margin-top: -5px; margin-bottom: 15px;">
+                <a href="/admin/forgot-password"
+                   style="font-size: 14px; color: #0d1b3d; text-decoration: none; font-weight: 600;">
+                    Forgot Password?
+                </a>
+            </div>
+
+            <!-- CAPTCHA -->
+            <div class="captcha-row">
+                <label>Enter CAPTCHA</label>
+
+                <div class="captcha-group">
+                    <span id="captchaText" class="captcha-box"></span>
+                    <span class="reload" onclick="generateCaptcha()">🔄</span>
+                </div>
+            </div>
+
+            <input type="text" id="captchaInput" name="captchaInput" placeholder="Enter CAPTCHA Here" required>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById("adminId").addEventListener("input", function () {
+        const id = this.value.trim();
+        document.getElementById("password").disabled = id.length < 6;
+    });
+
+    function togglePassword() {
+        const field = document.getElementById("password");
+        field.type = field.type === "password" ? "text" : "password";
+    }
+
+    function generateCaptcha() {
+        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        let cap = "";
+        for (let i = 0; i < 6; i++) {
+            cap += chars[Math.floor(Math.random() * chars.length)];
+        }
+        document.getElementById("captchaText").innerHTML = cap;
+    }
+    generateCaptcha();
+
+    // REMOVE POPUP — show red error message instead
+    document.getElementById("adminForm").addEventListener("submit", function (e) {
+        const correct = document.getElementById("captchaText").innerHTML;
+        const entered = document.getElementById("captchaInput").value.trim();
+
+        if (correct !== entered) {
+            e.preventDefault();
+            document.querySelector(".error").innerHTML = "Incorrect CAPTCHA!";
+            generateCaptcha();
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexa Bank</title>
+
+    <style>
+        /* GENERAL */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #f1f4f9;
+            color: #1d1d1d;
+        }
+
+        /* NAVBAR */
+        .navbar-custom {
+            background: #062045;
+            padding: 18px 60px;
+        }
+        .navbar-brand {
+            color: #ffcc33;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+      .hero {
+    padding: 30px 10% 80px 10%;
+    background: linear-gradient(135deg, #062045, #0a3781);
+    color: white;
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+        }
+        .hero p {
+            font-size: 20px;
+            opacity: .9;
+            max-width: 480px;
+        }
+        .btn-start {
+            background: #ffcc33;
+            padding: 14px 40px;
+            font-size: 20px;
+            font-weight: 700;
+            border-radius: 10px;
+            border: none;
+            margin-top: 25px;
+            color: #1b1b1b;
+            transition: .3s;
+        }
+        .btn-start:hover {
+            background: #ffd84d;
+            transform: translateY(-4px);
+        }
+
+        /* SECTIONS */
+        h2.section-title {
+            text-align: center;
+            font-size: 38px;
+            font-weight: 700;
+            margin: 60px 0 40px 0;
+            color: #062045;
+        }
+
+        /* SERVICES */
+        .services-section {
+            padding: 40px 8%;
+        }
+        .service-card {
+            background: white;
+            padding: 30px 25px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            transition: .3s ease;
+            border-top: 5px solid #062045;
+        }
+        .service-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+            border-color: #0a66c2;
+        }
+
+        .service-card img {
+            width: 55px;
+            margin-bottom: 15px;
+        }
+
+        /* WHY CHOOSE US */
+        .choose-card {
+            background: white;
+            padding: 28px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            transition: .3s ease;
+            border-left: 5px solid #0a3781;
+        }
+        .choose-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+            border-left-color: #ffcc33;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #062045;
+            color: #ffffffd0;
+            padding: 50px 10%;
+            margin-top: 60px;
+        }
+        footer h5 {
+            color: #ffcc33;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        footer a {
+            color: #ddd;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        footer .copyright {
+            text-align: center;
+            margin-top: 40px;
+            color: #ffffff88;
+            font-size: 14px;
+        }
+
+        /* POPUP MODAL */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: .25s ease;
+            z-index: 2000;
+        }
+        .modal.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-box {
+            width: 90%;
+            max-width: 700px;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+            animation: pop 0.25s ease;
+        }
+
+        @keyframes pop {
+            from {transform: scale(.85); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+
+        .modal-header {
+            font-size: 26px;
+            font-weight: 700;
+            color: #062045;
+            margin-bottom: 15px;
+        }/* PREMIUM STATS SECTION */
+.stats-section {
+    padding: 40px 8%;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    flex-wrap: wrap;
+}
+
+.stats-card {
+    width: 300px;
+    padding: 35px 25px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #ffffff, #e9f0ff);
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: 0.3s ease;
+    border-bottom: 6px solid #062045;
+}
+
+.stats-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    border-bottom-color: #ffcc33;
+}
+
+.stats-icon {
+    width: 65px;
+    margin-bottom: 10px;
+}
+
+.stats-card h1 {
+    font-size: 50px;
+    margin: 5px 0;
+    font-weight: 700;
+    color: #062045;
+}
+
+.stats-card p {
+    font-size: 18px;
+    color: #1d1d1d;
+    margin: 10px 0 0 0;
+}
+
+        .modal-close {
+            float: right;
+            cursor: pointer;
+            font-size: 22px;
+            color: #062045;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar-custom d-flex justify-content-between">
+    <span class="navbar-brand">Nexa Bank</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div>
+        <h1>Banking Made<br>Simple, Secure & Smart</h1>
+        <p>
+            Nexa Bank brings you modern, fast, and secure banking solutions
+            designed for your future — with trust at the core.
+        </p>
+
+        <a href="/choose">
+            <button class="btn-start">Get Started →</button>
+        </a>
+    </div>
+
+    <img th:src="@{/bank.png}" style="width:320px; border-radius:20px; background:white; padding:20px;">
+</section>
+
+<!-- OUR SERVICES -->
+<h2 class="section-title">Our Services</h2>
+
+<section class="services-section">
+    <div class="row" style="display:flex; gap:25px; flex-wrap:wrap; justify-content:center;">
+
+        <div class="service-card" style="width:300px;">
+            <img src="https://img.icons8.com/color/96/bank-card-back-side.png">
+            <h3>Virtual Debit Card</h3>
+            <p>Instant access to your digital debit card with OTP-based security.</p>
+        </div>
+
+        <div class="service-card" style="width:300px;">
+            <img src="https://img.icons8.com/emoji/96/money-bag-emoji.png">
+            <h3>Money Transfer</h3>
+            <p>Send money via UPI, NEFT, IMPS, or direct bank transfer.</p>
+        </div>
+
+        <div class="service-card" style="width:300px;">
+            <img src="https://img.icons8.com/ios-filled/100/document.png">
+            <h3>Statements</h3>
+            <p>Download monthly e-statements anytime with one click.</p>
+        </div>
+
+        <div class="service-card" style="width:300px;">
+            <img src="https://img.icons8.com/color/96/lock.png">
+            <h3>Change PIN</h3>
+            <p>Change your ATM PIN securely with OTP verification.</p>
+        </div>
+
+        <div class="service-card" style="width:300px;">
+            <img src="https://img.icons8.com/color/96/bank-building.png">
+            <h3>Apply Loan</h3>
+            <p>Apply for home, personal, and education loans instantly.</p>
+        </div>
+
+        <div class="service-card" style="width:300px;">
+            <img src="https://img.icons8.com/color/96/megaphone.png">
+            <h3>Raise Complaint</h3>
+            <p>Submit complaints and track status from your dashboard.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<h2 class="section-title">Why Choose Nexa Bank?</h2>
+
+<section class="services-section">
+    <div class="row" style="display:flex; gap:25px; flex-wrap:wrap; justify-content:center;">
+
+        <div class="choose-card" style="width:320px;">
+            <img src="https://img.icons8.com/color/96/lock.png" width="50">
+            <h3>Top-Tier Security</h3>
+            <p>Bank-grade encryption ensures your money & data stay protected.</p>
+        </div>
+
+        <div class="choose-card" style="width:320px;">
+            <img src="https://img.icons8.com/color/96/flash-on.png" width="50">
+            <h3>Instant Banking</h3>
+            <p>Lightning-fast transfers, payments, and banking actions.</p>
+        </div>
+
+        <div class="choose-card" style="width:320px;">
+            <img src="https://img.icons8.com/color/96/touchscreen-smartphone.png" width="50">
+            <h3>Smart Digital App</h3>
+            <p>Manage your entire banking journey from one app.</p>
+        </div>
+
+    </div>
+</section>
+<!-- STATISTICS SECTION (PREMIUM) -->
+<h2 class="section-title">Our Achievements</h2>
+
+<section class="stats-section">
+    <div class="stats-container">
+
+        <div class="stats-card">
+            <img src="https://img.icons8.com/fluency/96/user-group-man-man.png" class="stats-icon">
+            <h1><span class="counter" data-target="50">0</span>+</h1>
+            <p>Active Accounts</p>
+        </div>
+
+        <div class="stats-card">
+            <img src="https://img.icons8.com/fluency/96/money-transfer.png" class="stats-icon">
+            <h1><span class="counter" data-target="100">0</span>+</h1>
+            <p>Verified Transactions</p>
+        </div>
+
+        <div class="stats-card">
+            <img src="https://img.icons8.com/fluency/96/request-money.png" class="stats-icon">
+            <h1><span class="counter" data-target="30">0</span>+</h1>
+            <p>Loan Applications</p>
+        </div>
+
+    </div>
+</section>
+
+<div style="display:flex; justify-content:center; margin:40px 0;">
+    <lottie-player
+            src="https://assets7.lottiefiles.com/packages/lf20_puciaact.json"
+            background="transparent"
+            speed="1"
+            style="width:300px; height:300px;"
+            loop autoplay>
+    </lottie-player>
+
+</div>
+<div class="rotate-box">
+    <span id="rotate-text">Smart. Secure. Seamless.</span>
+</div>
+
+<style>
+    .rotate-box {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 28px;
+        font-weight: 700;
+        color: #062045;
+    }
+</style>
+
+<script>
+    const messages = [
+        "Smart. Secure. Seamless.",
+        "Experience banking with confidence.",
+        "Your money. Your future. Our responsibility.",
+        "Fast. Safe. Trusted by thousands."
+    ];
+
+    let index = 0;
+    setInterval(() => {
+        document.getElementById("rotate-text").textContent = messages[index];
+        index = (index + 1) % messages.length;
+    }, 2000);
+</script>
+<!-- ⭐ ADVANCED CALL-TO-ACTION SECTION -->
+<section class="cta-wrapper">
+
+    <style>
+        /* CTA SECTION WRAPPER */
+        .cta-wrapper {
+            display: flex;
+            justify-content: center;
+            padding: 80px 20px;
+        }
+
+        /* CTA CARD */
+        .cta-card {
+            position: relative;
+            width: 60%;
+            padding: 20px 40px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            animation: floatCard 6s ease-in-out infinite;
+            text-align: center;
+        }
+
+        /* Animated Gradient Border */
+        .cta-card:before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #004aad, #0074f8, #00c8ff);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            animation: gradientMove 6s linear infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* HEADING TEXT */
+        .cta-card h2 {
+            font-size: 42px;
+            font-weight: 800;
+            color: #062045;
+            margin-bottom: 15px;
+        }
+
+        /* SUBTEXT */
+        .cta-card p {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 35px;
+        }
+
+        /* BUTTON */
+        .cta-btn {
+            position: relative;
+            background: #ffcc33;
+            color: #000;
+            font-size: 22px;
+            font-weight: 700;
+            padding: 16px 45px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(255,204,51,0.4);
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(255,204,51,0.55);
+        }
+
+        /* SHINE EFFECT */
+        .cta-btn .shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 120%;
+            height: 100%;
+            background: rgba(255,255,255,0.4);
+            transform: skewX(-25deg);
+            animation: shineMove 2.5s infinite;
+        }
+
+        @keyframes shineMove {
+            0% { left: -130%; }
+            100% { left: 130%; }
+        }
+
+        /* ICONS */
+        .cta-icon {
+            position: absolute;
+            width: 95px;
+            opacity: 0.9;
+        }
+
+        .cta-icon.left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .cta-icon.right {
+            bottom: 20px;
+            right: 20px;
+        }
+    </style>
+
+    <!-- CTA CONTENT -->
+    <div class="cta-card">
+
+        <img src="https://img.icons8.com/color/96/money.png" class="cta-icon right">
+
+        <h2>Upgrade to Smarter Digital Banking</h2>
+        <p>Your trusted partner for secure transactions, instant transfers, and seamless financial growth.</p>
+
+        <!-- ⭐ FIXED BUTTON (NOW REDIRECTS TO /choose) -->
+        <a href="/select-account-type" class="cta-btn">
+            Open Your Account →
+            <span class="shine"></span>
+        </a>
+
+        <!-- If using Thymeleaf, use this instead:
+        <a th:href="@{/choose}" class="cta-btn">
+            Open Your Account →
+            <span class="shine"></span>
+        </a>
+        -->
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="row" style="display:flex; justify-content:space-between; flex-wrap:wrap;">
+
+        <div>
+            <h5>Nexa Bank</h5>
+            <p>Future-ready digital banking.</p>
+        </div>
+
+        <div>
+            <h5>Company</h5>
+            <p><a onclick="openModal('about-modal')">About Us</a></p>
+            <p><a onclick="openModal('privacy-modal')">Privacy Policy</a></p>
+        </div>
+
+        <div>
+            <h5>Support</h5>
+            <p><a onclick="openModal('contact-modal')">Contact Us</a></p>
+        </div>
+
+    </div>
+
+    <p class="copyright">© 2025 Nexa Bank. All Rights Reserved.</p>
+</footer>
+
+<!-- ABOUT MODAL -->
+<div id="about-modal" class="modal">
+    <div class="modal-box">
+        <span class="modal-close" onclick="closeModal('about-modal')">✖</span>
+        <div class="modal-header">About Nexa Bank</div>
+        <p>
+            Nexa Bank is a next-generation digital bank built for speed, security,
+            and smart financial growth. We provide modern banking solutions with
+            top-tier encryption, instant transactions, and a seamless digital experience.
+        </p>
+    </div>
+</div>
+
+<!-- PRIVACY MODAL -->
+<div id="privacy-modal" class="modal">
+    <div class="modal-box">
+        <span class="modal-close" onclick="closeModal('privacy-modal')">✖</span>
+        <div class="modal-header">Privacy Policy</div>
+        <p>
+            We collect necessary information to provide secure banking services.
+            Your data is encrypted and never shared with third parties except as legally required.
+        </p>
+    </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div id="contact-modal" class="modal">
+    <div class="modal-box">
+        <span class="modal-close" onclick="closeModal('contact-modal')">✖</span>
+        <div class="modal-header">Contact Us</div>
+        <p>Email: <b>smartbankintern@gmail.com</b></p>
+        <p>We usually respond within 24 hours.</p>
+    </div>
+</div>
+
+<!-- MODAL SCRIPT -->
+<script>
+    function openModal(id){
+        document.getElementById(id).classList.add("show");
+    }
+    function closeModal(id){
+        document.getElementById(id).classList.remove("show");
+    }
+</script>
+<script src="https://unpkg.com/@lottiefiles/lottie-player@1.5.7/dist/lottie-player.js"></script>
+
+<script>
+    const counters = document.querySelectorAll('.counter');
+
+    counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        const speed = 200;
+
+        const updateCounter = () => {
+            const value = +counter.innerText;
+            const increment = target / speed;
+
+            if (value < target) {
+                counter.innerText = Math.ceil(value + increment);
+                setTimeout(updateCounter, 20);
+            } else {
+                counter.innerText = target;
+            }
+        };
+
+        updateCounter();
+    });
+</script>
+
+</body>
+</html>
